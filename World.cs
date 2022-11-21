@@ -5,7 +5,7 @@ namespace Bluerain_Tech_Introduction
     public class World
     {
         string[,] Map = new string[5, 5];
-        List<Rover> Rovers = new();
+        readonly List<Rover> Rovers = new();
 
         public World(int mapSizeX, int mapSizeY)
         {
@@ -87,45 +87,55 @@ namespace Bluerain_Tech_Introduction
 
             foreach (var coordinate in instructions)
             {
-                if (coordinate == 'N')
+                switch (coordinate)
                 {
-                    UpdateMap(selectedRover, coordinate);
+                    case 'N':
+                        {
+                            UpdateMap(selectedRover, coordinate);
 
-                    // Update the Rover.
-                    var newPostion = new Vector2(selectedRover.CurrentPosition.X + 1, selectedRover.CurrentPosition.Y);
-                    selectedRover.CurrentPosition = newPostion;
-                    Rovers.Remove(selectedRover);
-                    Rovers.Insert(roverNumber, selectedRover);
-                }
-                else if (coordinate == 'S')
-                {
-                    UpdateMap(selectedRover, coordinate);
+                            // Update the Rover.
+                            var newPostion = new Vector2(selectedRover.CurrentPosition.X + 1, selectedRover.CurrentPosition.Y);
+                            selectedRover.CurrentPosition = newPostion;
+                            Rovers.Remove(selectedRover);
+                            Rovers.Insert(roverNumber, selectedRover);
+                            break;
+                        }
 
-                    // Update the Rover.
-                    var newPostion = new Vector2(selectedRover.CurrentPosition.X - 1, selectedRover.CurrentPosition.Y);
-                    selectedRover.CurrentPosition = newPostion;
-                    Rovers.Remove(selectedRover);
-                    Rovers.Insert(roverNumber, selectedRover);
-                }
-                else if (coordinate == 'E')
-                {
-                    UpdateMap(selectedRover, coordinate);
+                    case 'S':
+                        {
+                            UpdateMap(selectedRover, coordinate);
 
-                    // Update the Rover.
-                    var newPostion = new Vector2(selectedRover.CurrentPosition.X, selectedRover.CurrentPosition.Y + 1);
-                    selectedRover.CurrentPosition = newPostion;
-                    Rovers.Remove(selectedRover);
-                    Rovers.Insert(roverNumber, selectedRover);
-                }
-                else if (coordinate == 'W')
-                {
-                    UpdateMap(selectedRover, coordinate);
+                            // Update the Rover.
+                            var newPostion = new Vector2(selectedRover.CurrentPosition.X - 1, selectedRover.CurrentPosition.Y);
+                            selectedRover.CurrentPosition = newPostion;
+                            Rovers.Remove(selectedRover);
+                            Rovers.Insert(roverNumber, selectedRover);
+                            break;
+                        }
 
-                    // Update the Rover.
-                    var newPostion = new Vector2(selectedRover.CurrentPosition.X, selectedRover.CurrentPosition.Y - 1);
-                    selectedRover.CurrentPosition = newPostion;
-                    Rovers.Remove(selectedRover);
-                    Rovers.Insert(roverNumber, selectedRover);
+                    case 'E':
+                        {
+                            UpdateMap(selectedRover, coordinate);
+
+                            // Update the Rover.
+                            var newPostion = new Vector2(selectedRover.CurrentPosition.X, selectedRover.CurrentPosition.Y + 1);
+                            selectedRover.CurrentPosition = newPostion;
+                            Rovers.Remove(selectedRover);
+                            Rovers.Insert(roverNumber, selectedRover);
+                            break;
+                        }
+
+                    case 'W':
+                        {
+                            UpdateMap(selectedRover, coordinate);
+
+                            // Update the Rover.
+                            var newPostion = new Vector2(selectedRover.CurrentPosition.X, selectedRover.CurrentPosition.Y - 1);
+                            selectedRover.CurrentPosition = newPostion;
+                            Rovers.Remove(selectedRover);
+                            Rovers.Insert(roverNumber, selectedRover);
+                            break;
+                        }
                 }
             }
         }
@@ -135,77 +145,77 @@ namespace Bluerain_Tech_Introduction
             bool openSpace = Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] == "." ||
                 Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] == "@";
 
-            if (coordinate == 'N')
+            switch (coordinate)
             {
-                if (openSpace)
-                {
-                    // Free open space.
-                    Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] = "↑";
-                }
+                case 'N':
+                    if (openSpace)
+                    {
+                        // Add Direction.
+                        Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] = "↑";
+                    }
 
-                if (Map[(int)rover.CurrentPosition.X + 1, (int)rover.CurrentPosition.Y] is "↑" or "↓" or ">" or "<")
-                {
-                    // Paths intersect.
-                    Map[(int)rover.CurrentPosition.X + 1, (int)rover.CurrentPosition.Y] = "#";
-                }
-                else
-                {
-                    Map[(int)rover.CurrentPosition.X + 1, (int)rover.CurrentPosition.Y] = "@";
-                }
-            }
-            else if (coordinate == 'S')
-            {
-                if (openSpace)
-                {
-                    // Free open space.
-                    Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] = "↓";
-                }
+                    if (Map[(int)rover.CurrentPosition.X + 1, (int)rover.CurrentPosition.Y] is "↑" or "↓" or ">" or "<")
+                    {
+                        // Paths intersect.
+                        Map[(int)rover.CurrentPosition.X + 1, (int)rover.CurrentPosition.Y] = "#";
+                    }
+                    else
+                    {
+                        // Free open space.
+                        Map[(int)rover.CurrentPosition.X + 1, (int)rover.CurrentPosition.Y] = "@";
+                    }
+                    break;
+                case 'S':
+                    if (openSpace)
+                    {
+                        // Free open space.
+                        Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] = "↓";
+                    }
 
-                if (Map[(int)rover.CurrentPosition.X - 1, (int)rover.CurrentPosition.Y] is "↑" or "↓" or ">" or "<")
-                {
-                    // Paths intersect.
-                    Map[(int)rover.CurrentPosition.X - 1, (int)rover.CurrentPosition.Y] = "#";
-                }
-                else
-                {
-                    Map[(int)rover.CurrentPosition.X - 1, (int)rover.CurrentPosition.Y] = "@";
-                }
-            }
-            else if (coordinate == 'E')
-            {
-                if (openSpace)
-                {
-                    // Free open space.
-                    Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] = ">";
-                }
+                    if (Map[(int)rover.CurrentPosition.X - 1, (int)rover.CurrentPosition.Y] is "↑" or "↓" or ">" or "<")
+                    {
+                        // Paths intersect.
+                        Map[(int)rover.CurrentPosition.X - 1, (int)rover.CurrentPosition.Y] = "#";
+                    }
+                    else
+                    {
+                        Map[(int)rover.CurrentPosition.X - 1, (int)rover.CurrentPosition.Y] = "@";
+                    }
+                    break;
+                case 'E':
+                    if (openSpace)
+                    {
+                        // Free open space.
+                        Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] = ">";
+                    }
 
-                if (Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y + 1] is "↑" or "↓" or ">" or "<")
-                {
-                    // Paths intersect.
-                    Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y + 1] = "#";
-                }
-                else
-                {
-                    Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y + 1] = "@";
-                }
-            }
-            else if (coordinate == 'W')
-            {
-                if (openSpace)
-                {
-                    // Free open space.
-                    Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] = "<";
-                }
+                    if (Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y + 1] is "↑" or "↓" or ">" or "<")
+                    {
+                        // Paths intersect.
+                        Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y + 1] = "#";
+                    }
+                    else
+                    {
+                        Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y + 1] = "@";
+                    }
+                    break;
+                case 'W':
+                    if (openSpace)
+                    {
+                        // Free open space.
+                        Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] = "<";
+                    }
 
-                if (Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y - 1] is "↑" or "↓" or ">" or "<")
-                {
-                    // Paths intersect.
-                    Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y - 1] = "#";
-                }
-                else
-                {
-                    Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y - 1] = "@";
-                }
+                    if (Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y - 1] is "↑" or "↓" or ">" or "<")
+                    {
+                        // Paths intersect.
+                        Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y - 1] = "#";
+                    }
+                    else
+                    {
+                        Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y - 1] = "@";
+                    }
+                    break;
             }
         }
 
