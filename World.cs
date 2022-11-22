@@ -9,15 +9,15 @@ namespace Bluerain_Tech_Introduction
 
         public World(int mapSizeX, int mapSizeY)
         {
-            GenerateWorld(mapSizeX, mapSizeY);
+            GenerateWorld(mapSizeX: mapSizeX, mapSizeY: mapSizeY);
         }
 
         void GenerateWorld(int mapSizeX, int mapSizeY)
         {
             Map = new string[mapSizeX, mapSizeY];
-            for (int row = 0; row < Map.GetLength(0); row++)
+            for (int row = 0; row < Map.GetLength(dimension: 0); row++)
             {
-                for (int column = 0; column < Map.GetLength(1); column++)
+                for (int column = 0; column < Map.GetLength(dimension: 1); column++)
                 {
                     Map[row, column] = ".";
                 }
@@ -57,9 +57,9 @@ namespace Bluerain_Tech_Introduction
             int x = 0;
             int y = 0;
 
-            for (int row = 0; row < Map.GetLength(0); row++)
+            for (int row = 0; row < Map.GetLength(dimension: 0); row++)
             {
-                for (int column = 0; column < Map.GetLength(1); column++)
+                for (int column = 0; column < Map.GetLength(dimension: 1); column++)
                 {
                     if (row == startingX && column == startingY)
                     {
@@ -72,78 +72,97 @@ namespace Bluerain_Tech_Introduction
 
             Map[destinationX, destinationY] = "D";
 
-            Rovers.Add(new Rover
-            {
-                CurrentPosition = new Vector2(x, y)
-            });
+            Rovers.Add(new Rover { CurrentPosition = new Vector2(x: x, y: y) });
 
-            Console.WriteLine("Rover " + Rovers.Count + ": starting position: (" + x.ToString() + ", " + y.ToString() + ")");
+            Console.WriteLine(
+                "Rover "
+                    + Rovers.Count
+                    + ": starting position: ("
+                    + x.ToString()
+                    + ", "
+                    + y.ToString()
+                    + ")"
+            );
             Console.WriteLine();
         }
 
         public void MoveRover(int roverNumber, string instructions)
         {
             var selectedRover = Rovers[roverNumber];
+            Vector2 newPosition;
 
             foreach (var coordinate in instructions)
             {
                 switch (coordinate)
                 {
                     case 'N':
-                        {
-                            UpdateMap(selectedRover, coordinate);
+                    {
+                        UpdateMap(rover: selectedRover, coordinate: coordinate);
 
-                            // Update the Rover.
-                            var newPostion = new Vector2(selectedRover.CurrentPosition.X + 1, selectedRover.CurrentPosition.Y);
-                            selectedRover.CurrentPosition = newPostion;
-                            Rovers.Remove(selectedRover);
-                            Rovers.Insert(roverNumber, selectedRover);
-                            break;
-                        }
+                        // Update the Rover.
+                        newPosition = new Vector2(
+                            selectedRover.CurrentPosition.X + 1,
+                            selectedRover.CurrentPosition.Y
+                        );
+                        selectedRover.CurrentPosition = newPosition;
+                        Rovers.Remove(selectedRover);
+                        Rovers.Insert(roverNumber, selectedRover);
+                        break;
+                    }
 
                     case 'S':
-                        {
-                            UpdateMap(selectedRover, coordinate);
+                    {
+                        UpdateMap(rover: selectedRover, coordinate: coordinate);
 
-                            // Update the Rover.
-                            var newPostion = new Vector2(selectedRover.CurrentPosition.X - 1, selectedRover.CurrentPosition.Y);
-                            selectedRover.CurrentPosition = newPostion;
-                            Rovers.Remove(selectedRover);
-                            Rovers.Insert(roverNumber, selectedRover);
-                            break;
-                        }
+                        // Update the Rover.
+                        newPosition = new Vector2(
+                            selectedRover.CurrentPosition.X - 1,
+                            selectedRover.CurrentPosition.Y
+                        );
+                        selectedRover.CurrentPosition = newPosition;
+                        Rovers.Remove(selectedRover);
+                        Rovers.Insert(roverNumber, selectedRover);
+                        break;
+                    }
 
                     case 'E':
-                        {
-                            UpdateMap(selectedRover, coordinate);
+                    {
+                        UpdateMap(rover: selectedRover, coordinate: coordinate);
 
-                            // Update the Rover.
-                            var newPostion = new Vector2(selectedRover.CurrentPosition.X, selectedRover.CurrentPosition.Y + 1);
-                            selectedRover.CurrentPosition = newPostion;
-                            Rovers.Remove(selectedRover);
-                            Rovers.Insert(roverNumber, selectedRover);
-                            break;
-                        }
+                        // Update the Rover.
+                        newPosition = new Vector2(
+                            selectedRover.CurrentPosition.X,
+                            selectedRover.CurrentPosition.Y + 1
+                        );
+                        selectedRover.CurrentPosition = newPosition;
+                        Rovers.Remove(selectedRover);
+                        Rovers.Insert(roverNumber, selectedRover);
+                        break;
+                    }
 
                     case 'W':
-                        {
-                            UpdateMap(selectedRover, coordinate);
+                    {
+                        UpdateMap(rover: selectedRover, coordinate: coordinate);
 
-                            // Update the Rover.
-                            var newPostion = new Vector2(selectedRover.CurrentPosition.X, selectedRover.CurrentPosition.Y - 1);
-                            selectedRover.CurrentPosition = newPostion;
-                            Rovers.Remove(selectedRover);
-                            Rovers.Insert(roverNumber, selectedRover);
-                            break;
-                        }
+                        // Update the Rover.
+                        newPosition = new Vector2(
+                            selectedRover.CurrentPosition.X,
+                            selectedRover.CurrentPosition.Y - 1
+                        );
+                        selectedRover.CurrentPosition = newPosition;
+                        Rovers.Remove(selectedRover);
+                        Rovers.Insert(roverNumber, selectedRover);
+                        break;
+                    }
                 }
             }
         }
 
         void UpdateMap(Rover rover, char coordinate)
         {
-            bool openSpace = Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] == "." ||
-                Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] == "@";
+            bool openSpace =
+                Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] == "."
+                || Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] == "@";
 
             switch (coordinate)
             {
@@ -154,7 +173,13 @@ namespace Bluerain_Tech_Introduction
                         Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] = "↑";
                     }
 
-                    if (Map[(int)rover.CurrentPosition.X + 1, (int)rover.CurrentPosition.Y] is "↑" or "↓" or ">" or "<")
+                    if (
+                        Map[(int)rover.CurrentPosition.X + 1, (int)rover.CurrentPosition.Y]
+                        is "↑"
+                            or "↓"
+                            or ">"
+                            or "<"
+                    )
                     {
                         // Paths intersect.
                         Map[(int)rover.CurrentPosition.X + 1, (int)rover.CurrentPosition.Y] = "#";
@@ -172,7 +197,13 @@ namespace Bluerain_Tech_Introduction
                         Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] = "↓";
                     }
 
-                    if (Map[(int)rover.CurrentPosition.X - 1, (int)rover.CurrentPosition.Y] is "↑" or "↓" or ">" or "<")
+                    if (
+                        Map[(int)rover.CurrentPosition.X - 1, (int)rover.CurrentPosition.Y]
+                        is "↑"
+                            or "↓"
+                            or ">"
+                            or "<"
+                    )
                     {
                         // Paths intersect.
                         Map[(int)rover.CurrentPosition.X - 1, (int)rover.CurrentPosition.Y] = "#";
@@ -189,7 +220,13 @@ namespace Bluerain_Tech_Introduction
                         Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] = ">";
                     }
 
-                    if (Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y + 1] is "↑" or "↓" or ">" or "<")
+                    if (
+                        Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y + 1]
+                        is "↑"
+                            or "↓"
+                            or ">"
+                            or "<"
+                    )
                     {
                         // Paths intersect.
                         Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y + 1] = "#";
@@ -206,7 +243,13 @@ namespace Bluerain_Tech_Introduction
                         Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y] = "<";
                     }
 
-                    if (Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y - 1] is "↑" or "↓" or ">" or "<")
+                    if (
+                        Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y - 1]
+                        is "↑"
+                            or "↓"
+                            or ">"
+                            or "<"
+                    )
                     {
                         // Paths intersect.
                         Map[(int)rover.CurrentPosition.X, (int)rover.CurrentPosition.Y - 1] = "#";
@@ -221,9 +264,9 @@ namespace Bluerain_Tech_Introduction
 
         public void RenderWorld()
         {
-            for (int row = Map.GetLength(0) - 1; row >= 0; row--)
+            for (int row = Map.GetLength(dimension: 0) - 1; row >= 0; row--)
             {
-                for (int column = 0; column < Map.GetLength(1); column++)
+                for (int column = 0; column < Map.GetLength(dimension: 1); column++)
                 {
                     Console.Write(Map[row, column]);
                 }
@@ -231,6 +274,20 @@ namespace Bluerain_Tech_Introduction
             }
 
             Console.WriteLine();
+            for (int row = Map.GetLength(dimension: 0) - 1; row >= 0; row--)
+            {
+                for (int column = 0; column < Map.GetLength(dimension: 1); column++)
+                {
+                    if (Map[row, column] == "#")
+                    {
+                        Console.WriteLine(
+                            "Rover Intersection point at: (" + column + "," + row + ")"
+                        );
+                    }
+                }
+            }
+            Console.WriteLine();
+
             Console.WriteLine("Legend:");
             Console.WriteLine(". = Empty");
             Console.WriteLine("S = Starting Position");
@@ -242,6 +299,5 @@ namespace Bluerain_Tech_Introduction
             Console.WriteLine("< = Westwards Movement");
             Console.WriteLine("# = Rover path intersection");
         }
-
     }
 }
